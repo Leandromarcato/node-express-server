@@ -8,12 +8,13 @@ const path = require('path');
 const express = require('express'); // Importando librería express
 const cors = require('cors');
 const morgan = require('morgan');
-
+const dotenv = require('dotenv')
 const dbConnect = require('./src/db/connection_db'); // Se importa la función de conexión a la BD.
-
+dotenv.config()
 // Inicializaciones
 const app = express(); // Inicializando la librería express
-dbConnect(); // Se inicializa la conexión a la Base de Datos
+dbConnect(); 
+// Se inicializa la conexión a la Base de Datos
 /* cuando tengas internet hace correr ese comando, para descargarte la dependencia de cors, necesita eso primero
 pero y esta configurado tu base de datos, se va a conectar a este */
 

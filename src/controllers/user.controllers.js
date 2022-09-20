@@ -8,7 +8,10 @@ ctrlUser.getUsers = async (req, res) => {
     const users = await User.find();
 
     // Se devuelve al cliente un arreglo con los datos de los usuarios.
-    return res.json(users)
+    return res.json({
+        MSJ:"ORILA",
+        users
+    })
 };
 
 // Controlador para crear nuevo usuario en la Base de Datos.

@@ -1,27 +1,25 @@
 const router = require('express').Router();
+const { puttareas, gettareas } = require('../controllers/task.controllers');
 
-// Importando controladores
-const {
-    gettareas,
-    posttareas,
-    puttareas,
-    deletetareas,
+const validarJWT = require('../middlewares/validar-jwt');
 
-} = require('../controllers/tareas.controllers');
+// Crear nueva tarea
+router.post('/task', [
+    validarJWT,
+], pottareas);
 
-// Definiendo rutas
 
-// Ruta para obtener todos los usuarios
-router.get('/tareas', gettareas);
+router.get('/task', [
+    validarJWT
+], gettareas);
 
-// Crear nuevo usuario
-router.post('/tareas', posttareas);
+router.put('/task/:_id', [
+    validarJWT
+], puttareas);
 
-// Editar tareas, requiere ID de usuario
-router.put('/tareas', puttareas);
-
-// Eliminar tareas, requiere ID de usuario
-router.delete('/tareas', deletetareas);
+router.delete('/task/:_id', [
+    validarJWT
+], deletetareas);
 
 
 

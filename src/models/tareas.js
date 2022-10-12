@@ -8,19 +8,33 @@ const tareasSchema= new Schema(
         required: true }
         
         ,
-        descripcion:{
+        description:{
             type: String,
             require: true
         },
 
-        estados:{
-            type: String,
-            require: true 
-        }
+        active:{
+            type:Boolean,
+            default:true
+        },
+        Done: {
+            type: Boolean,
+            default: false
+        },
+        userId: {
+            type: Schema.Types.ObjectId, ref: 'Users'
+        },
+        categories: [
+            { type: Schema.Types.ObjectId, ref: 'Categories' }
+        ]
+    });
+        
+
+
 
         
         
-    }
-)
+    
+
 
 module.exports= model("tareas", tareasSchema)

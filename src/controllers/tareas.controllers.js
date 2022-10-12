@@ -1,50 +1,49 @@
 const tareaModel = require("../models/tareas");
 
-const ctrltareas = {};
+ctrlTask = {};
 
-// Controlador para obtener todos los usuarios de la Base de Datos.
-ctrltareas.gettareas = async (req, res) => {
-    // Se consultan todos los documentos de la base de datos.
-    const tareas = await tareaModel.find();
 
-    // Se devuelve al cliente un arreglo con los datos de los usuarios.
-    return res.json(tareas)
-};
+ctrlTask.postareas = async (req, res) => {
+    const { title, description } = req.body;
 
-// Controlador para crear nuevo usuario en la Base de Datos.
-ctrltareas.posttareas = async (req, res) => {
-    // Se obtienen los datos enviados por método POST
-    const { title, descripcion, estados } = req.body;
-
-    // Se instancia un nuevo documento de MongoDB para luego ser guardado
-    const newtareas = new tareaModel({
+    const task = new Tasks({
         title,
-        descripcion,
-        estados
+        description,
+        userId: req.user._id
     });
 
-    // Se almacena en la base de datos con método asícrono .save()
-    const tarea = await newtareas.save();
-    
-    // Se devuelve una respuesta al cliente con un mensaje y los datos del usuario creado.
-    return res.json({
-        msg: 'Usuario creado correctamente',
-        tarea
-    });
-};
 
-// Controlador para actualizar una tarea
-ctrltareas.puttareas = async (req, res) => {
-    return res.json({
-        msg: ''
-    })
-};
+    try {
+        const newTask = await task.save();
 
-// Controlador para eliminar usuario, requiere ID de usuario.
-ctrltareas.deletetareas = async (req, res) => {
-    return res.json({
-        msg: ''
-    })
-};
+        return res.json({
+            msg: 'Tarea creada correctamente',
+            newTask
+        })
+    } catch (error) {
+        return res.status(500).json({
+            msg:'Error al crear la tarea'
+        })
+    }
+}
 
-module.exports = ctrltareas;
+ctrlTask.gettareas = async (req, res) => {
+    const tasks = await tareaModel.find({ userId: req.user._id })
+    .populate('userId', ['username','email'])
+    return res.json(tasks);
+}
+
+ctrlTask.puttareas = async (req, res) => {
+    const id=req.params.id_tareas
+    const {title, descripcion,estados} =req.body
+    try{
+    const respuesta = await tareaModel.findByIdAndUpdate(id,{descripcion,title, estados})
+    res.json(respuesta)
+    }catch(error){
+    return res.json({message:error.message})
+        }
+    };
+
+
+
+module.exports = ctrlTask;

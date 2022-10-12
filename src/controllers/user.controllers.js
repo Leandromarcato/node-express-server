@@ -1,34 +1,34 @@
-const User = require("../models/User");
-
+const User = require("../models/user");
+const bcrypt = require('bcrypt');
 const ctrlUser = {};
 
 // Controlador para obtener todos los usuarios de la Base de Datos.
-ctrlUser.getUsers = async (req, res) => {
+ctrlUser.getUser = async (req, res) => {
     // Se consultan todos los documentos de la base de datos.
     const users = await User.find();
 
     // Se devuelve al cliente un arreglo con los datos de los usuarios.
-    return res.json({
-        MSJ:"ORILA",
-        users
-    })
+    return res.json(users)
 };
 
 // Controlador para crear nuevo usuario en la Base de Datos.
 ctrlUser.postUser = async (req, res) => {
     // Se obtienen los datos enviados por método POST
-    const { username, password, email } = req.body;
+    const { username, password: passwordRecibida, email } = req.body;
+
+    // Encriptar la contraseña del usuario
+    const newPassword = bcrypt.hashSync(passwordRecibida, 10);
 
     // Se instancia un nuevo documento de MongoDB para luego ser guardado
     const newUser = new User({
         username,
-        password,
+        password: newPassword,
         email
     });
 
     // Se almacena en la base de datos con método asícrono .save()
     const user = await newUser.save();
-    
+
     // Se devuelve una respuesta al cliente con un mensaje y los datos del usuario creado.
     return res.json({
         msg: 'Usuario creado correctamente',
@@ -38,16 +38,55 @@ ctrlUser.postUser = async (req, res) => {
 
 // Controlador para actualizar un usuario, requiere que se envíe ID  de usuario.
 ctrlUser.putUser = async (req, res) => {
-    return res.json({
-        msg: ''
-    })
+
+    const userId = req.params.id;
+
+    const { username, email, isActive, role, ...otraData } = req.body;
+
+    const data = { username, email, isActive, role };
+
+    try {
+        const dataUpdated = await User.findByIdAndUpdate(userId, data, { new: true});
+
+        return res.json({
+            msg: 'Usuario actualizado correctamente',
+            dataUpdated
+        })
+    } catch (error) {
+        return res.status(500).json({
+            msg:'Error al actualizar usuario'
+        })
+    }
 };
 
 // Controlador para eliminar usuario, requiere ID de usuario.
-ctrlUser.deleteUser = async (req, res) => {
-    return res.json({
-        msg: ''
-    })
-};
+ctrltareas.deleteuser = async (req, res) => {
+    const id = req.params.id_user
+   // const {title, descripcion} = req.body
+try{
+    if(!id){
+        return res.status(400).json({
+            message:"No hay id en la ruta"
+        })
+    }
+    // await tareaModel.findOneAndDeleteid,{descripcion,title},(err,docs)=>{
+    const tarea =  await tareaModel.findOne({$and:[{_id:id},{active:true}]});
+    if(!tarea){
+        return res.status(404).json({
+            message:"No se encuentra la tarea"
+        })
+    }
+    await tarea.updateOne({active:false})    
+    
+        
+        return res.json({
+            msg: 'la eliminacion se ha realizado correctamente'
+        })
+
+    }catch(error) {
+        console.log(error)
+       }
+           
+    }
 
 module.exports = ctrlUser;

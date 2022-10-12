@@ -35,15 +35,44 @@ ctrlTask.gettareas = async (req, res) => {
 
 ctrlTask.puttareas = async (req, res) => {
     const id=req.params.id_tareas
-    const {title, descripcion,estados} =req.body
+    const {title, descripcion,} =req.body
+    const datos ={title, descripcion,}
     try{
-    const respuesta = await tareaModel.findByIdAndUpdate(id,{descripcion,title, estados})
+    const respuesta = await tareaModel.findByIdAndUpdate(id,datos,{new:true })
     res.json(respuesta)
     }catch(error){
     return res.json({message:error.message})
         }
     };
 
-
+    ctrltareas.deletetareas = async (req, res) => {
+        const id = req.params.id_tareas
+       // const {title, descripcion} = req.body
+    try{
+        if(!id){
+            return res.status(400).json({
+                message:"No hay id en la ruta despues de /task/"
+            })
+        }
+        // await tareaModel.findOneAndDeleteid,{descripcion,title},(err,docs)=>{
+        const tarea =  await tareaModel.findOne({$and:[{_id:id},{active:true}]});
+        if(!tarea){
+            return res.status(404).json({
+                message:"No se encuentra la tarea"
+            })
+        }
+        await tarea.updateOne({active:false})    
+        
+            
+            return res.json({
+                msg: 'la eliminacion se ha realizado correctamente'
+            })
+    
+        }catch(error) {
+            console.log(error)
+           }
+               
+        }
+            
 
 module.exports = ctrlTask;

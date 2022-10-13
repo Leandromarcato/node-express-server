@@ -3,7 +3,7 @@ const tareaModel = require("../models/tareas");
 ctrlTask = {};
 
 
-ctrlTask.postareas = async (req, res) => {
+ctrlTask.posttareas = async (req, res) => {
     const { title, description } = req.body;
 
     const task = new Tasks({
@@ -41,17 +41,17 @@ ctrlTask.puttareas = async (req, res) => {
     const respuesta = await tareaModel.findByIdAndUpdate(id,datos,{new:true })
     res.json(respuesta)
     }catch(error){
-    return res.json({message:error.message})
+    return res.status(400).json({message:error.message})
         }
     };
 
-    ctrltareas.deletetareas = async (req, res) => {
+    ctrlTask.deletetareas = async (req, res) => {
         const id = req.params.id_tareas
-       // const {title, descripcion} = req.body
     try{
+        
         if(!id){
             return res.status(400).json({
-                message:"No hay id en la ruta despues de /task/"
+                message:"No hay id en la ruta despues de /tareas/"
             })
         }
         // await tareaModel.findOneAndDeleteid,{descripcion,title},(err,docs)=>{

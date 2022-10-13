@@ -1,12 +1,12 @@
 const router = require('express').Router();
-const { puttareas, gettareas } = require('../controllers/task.controllers');
+const { puttareas, gettareas, posttareas, deletetareas } = require('../controllers/tareas.controllers');
 
 const validarJWT = require('../middlewares/validar-jwt');
 
 // Crear nueva tarea
 router.post('/tareas', [
-    validarJWT,
-], pottareas);
+    validarJWT
+], posttareas);
 
 
 router.get('/tareas', [

@@ -4,8 +4,9 @@ const ctrlUser = {};
 
 // Controlador para obtener todos los usuarios de la Base de Datos.
 ctrlUser.getUser = async (req, res) => {
+    const id = req.user._id
     // Se consultan todos los documentos de la base de datos.
-    const users = await User.find();
+    const users = await User.findById(id);
 
     // Se devuelve al cliente un arreglo con los datos de los usuarios.
     return res.json(users)
@@ -14,10 +15,10 @@ ctrlUser.getUser = async (req, res) => {
 // Controlador para crear nuevo usuario en la Base de Datos.
 ctrlUser.postUser = async (req, res) => {
     // Se obtienen los datos enviados por método POST
-    const { username, password: passwordRecibida, email } = req.body;
+    const { username, password, email } = req.body;
 
     // Encriptar la contraseña del usuario
-    const newPassword = bcrypt.hashSync(passwordRecibida, 10);
+    const newPassword = bcrypt.hashSync(password, 10);
 
     // Se instancia un nuevo documento de MongoDB para luego ser guardado
     const newUser = new User({
@@ -28,7 +29,7 @@ ctrlUser.postUser = async (req, res) => {
 
     // Se almacena en la base de datos con método asícrono .save()
     const user = await newUser.save();
-
+console.log(user)
     // Se devuelve una respuesta al cliente con un mensaje y los datos del usuario creado.
     return res.json({
         msg: 'Usuario creado correctamente',
@@ -60,7 +61,8 @@ ctrlUser.putUser = async (req, res) => {
 };
 
 // Controlador para eliminar usuario, requiere ID de usuario.
-ctrltareas.deleteuser = async (req, res) => {
+    
+ctrlUser.deleteUser = async (req, res) => {
     const id = req.params.id_user
    // const {title, descripcion} = req.body
 try{
@@ -70,13 +72,13 @@ try{
         })
     }
     // await tareaModel.findOneAndDeleteid,{descripcion,title},(err,docs)=>{
-    const tarea =  await tareaModel.findOne({$and:[{_id:id},{active:true}]});
-    if(!tarea){
+    const user =  await tareaModel.findOne({$and:[{_id:id},{active:true}]});
+    if(!user){
         return res.status(404).json({
             message:"No se encuentra la tarea"
         })
     }
-    await tarea.updateOne({active:false})    
+    await user.updateOne({active:false})    
     
         
         return res.json({

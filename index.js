@@ -36,7 +36,7 @@ app.use(express.static(path.join(__dirname, 'src/public')));
 
 app.use(require('./src/routes/user.routes')); // Importando rutas
 app.use(require('./src/routes/tareas.routes')); // Importando rutas
-
+app.use(require('./src/routes/auth.routes'));
 // Configurando puerto
 app.listen(port, () => console.log(`Servidor corriendo en http://localhost:${port}`));
 

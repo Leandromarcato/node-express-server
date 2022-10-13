@@ -9,7 +9,7 @@ const {
     deleteUser,
 
 } = require('../controllers/user.controllers');
-const esAdmin = require('../middlewares/es-admin');
+const esAdmin = require('../middlewares/admin');
 const validarJWT = require('../middlewares/validar-jwt');
 
 // Definiendo rutas
@@ -21,9 +21,7 @@ router.get('/user',[
 ] ,getUser);
 
 // Crear nuevo usuario
-router.post('/user', [
-    validarJWT
-], postUser);
+router.post('/user', postUser);
 
 // Editar usuario, requiere ID de usuario
 router.put('/user/:id', [

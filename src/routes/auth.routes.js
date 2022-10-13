@@ -1,6 +1,6 @@
-const { iniciarSesion } = require('../controllers/auth.controllers');
-
 const router = require('express').Router();
+const { iniciarSesion } = require('../controllers/auth.constrollers');
+
 
 router.post('/login', iniciarSesion )
 

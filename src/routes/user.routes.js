@@ -21,7 +21,8 @@ router.get('/user',[
 ] ,getUser);
 
 // Crear nuevo usuario
-router.post('/user', postUser);
+router.post('/user'
+ ,postUser);
 
 // Editar usuario, requiere ID de usuario
 router.put('/user/:id', [

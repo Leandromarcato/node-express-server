@@ -6,7 +6,7 @@ ctrlTask = {};
 ctrlTask.posttareas = async (req, res) => {
     const { title, description } = req.body;
 
-    const task = new Tasks({
+    const task = new tareaModel({
         title,
         description,
         userId: req.user._id

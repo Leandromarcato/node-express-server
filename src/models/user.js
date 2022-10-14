@@ -20,6 +20,7 @@ const UserSchema = new Schema({
     },
     role:{
         type: String,
+        default: 'admin_user'
     }
 
 }, {
